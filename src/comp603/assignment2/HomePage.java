@@ -11,14 +11,11 @@ public class HomePage extends JFrame {
     JPanel mainPanel;
     Book bookingMenu;
     Facilities fac;
+    Cancelbooking cancel;
     
     public HomePage() {
         DataBase = new DBManager();
         
-        // Set the size of the frame
-//        setSize(700, 700);
-
-        // Set the default close operation
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create and set the border
@@ -52,6 +49,13 @@ public class HomePage extends JFrame {
 
         JButton button2 = new JButton("Cancel your booking");
         button2.setBounds(220, 200, 200, 35);
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cancelbooking(e);
+            }
+
+        });
         mainPanel.add(button2);
 
         JButton button3 = new JButton("Check my booking");
@@ -79,9 +83,6 @@ public class HomePage extends JFrame {
         });
         mainPanel.add(button5);
 
-        button2.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "click2");
-        });
     }
     
     private void bookingButton(ActionEvent evt) {
@@ -95,7 +96,13 @@ public class HomePage extends JFrame {
         fac.setVisible(true);
         this.setVisible(false);
     }
-
+    
+    private void Cancelbooking(ActionEvent evt) {
+        cancel = new Cancelbooking(this);
+        cancel.setVisible(true);
+        this.setVisible(false);
+    }
+    
     private void exitButton(ActionEvent evt) {
         JOptionPane.showMessageDialog(HomePage.this, "Thank you for using the system.");
         System.exit(0);

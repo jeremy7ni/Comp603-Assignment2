@@ -19,11 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DatePicker extends JFrame {
-
-    private JTextField checkInField;
-    private JTextField checkOutField;
-    private JLabel checkIn;
-    private JLabel checkOut;
+    
     private java.util.Date date1 = null;
     private java.util.Date date2 = null;
     private SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
@@ -32,13 +28,21 @@ public class DatePicker extends JFrame {
     private boolean isValidDate1 = false;
     private boolean isValidDate2 = false;
     private long diffInDays;
-    private JLabel info;
+   
+    private JTextField checkInField;
+    private JTextField checkOutField;
+    private final JLabel checkIn;
+    private final JLabel checkOut;   
+    private final JLabel info;
+    private final JButton ReturnHome;
     
+    HomePage homePage;
     Book booking;
     PriceCalculator priceCal;
 
-    public DatePicker(Book booking) {
+    public DatePicker(Book booking, HomePage home) {
 
+        this.homePage = home;
         this.booking = booking;
         setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -173,9 +177,9 @@ public class DatePicker extends JFrame {
 
         });
 
-        JButton home = new JButton("Return to Booking");
-        home.setBounds(280, 480, 150, 35);
-        home.addActionListener((ActionEvent e) -> {
+        ReturnHome = new JButton("Return to Booking");
+        ReturnHome.setBounds(280, 480, 150, 35);
+        ReturnHome.addActionListener((ActionEvent e) -> {
             dispose();
             ReturnButton(e);
         });
@@ -220,6 +224,14 @@ public class DatePicker extends JFrame {
         priceCal = new PriceCalculator(this);
         priceCal.setVisible(true);
         this.setVisible(false);
+    }
+
+    public java.util.Date getDate1() {
+        return date1;
+    }
+
+    public java.util.Date getDate2() {
+        return date2;
     }
     
 }
