@@ -6,8 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.Border;
 
+/**
+ *
+ * @author Jeremy
+ */
 public class HomePage extends JFrame {
-    private DBManager DataBase;
+    protected DBManager DataBase;
     JPanel mainPanel;
     Book bookingMenu;
     Facilities fac;
@@ -85,7 +89,7 @@ public class HomePage extends JFrame {
 
     }
     
-    private void bookingButton(ActionEvent evt) {
+    private void bookingButton(ActionEvent eve) {
         bookingMenu = new Book(this);
         bookingMenu.setVisible(true);
         this.setVisible(false);

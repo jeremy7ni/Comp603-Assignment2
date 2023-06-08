@@ -8,11 +8,8 @@ package comp603.assignment2;
 public class SingleRoom extends Room {
 
     
-    public SingleRoom(){
-        
-    }
-    public SingleRoom(double price, String roomType) {
-        super(price = 150, roomType = "Single Room");
+    public SingleRoom() {
+        super(150, "Single Room");
     }
 
     @Override

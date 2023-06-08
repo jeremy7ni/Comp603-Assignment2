@@ -11,14 +11,9 @@ package comp603.assignment2;
 public class DoubleRoom extends Room {
 
     public DoubleRoom() {
+        super(220, "Double Room");
     }
-    
-    
-    
-    public DoubleRoom(double price, String roomType) {
-        super(price = 220, roomType = "Double Room");
-    }
-    
+
     @Override
     public void BedSize() {
         System.out.println("You have Double Bed in the Double Room");

@@ -6,7 +6,9 @@ package comp603.assignment2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 /**
  *
@@ -55,5 +57,23 @@ public class DBManager {
         }
     }
     
+    public void addBooking(Booking booking) {
+        String query = "INSERT INTO BOOKINGLIST(CUSTOMERNAME, ROOMTYPE, CHECKINDATE, CHECKOUTDATE, PHONE) VALUES (?,?,?,?,?)";
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1,booking.name);
+            statement.setString(2,booking.room.getRoomType());
+            statement.setString(3,booking.CheckIndate);
+            statement.setString(4,booking.CheckOutdate);
+            statement.setString(5, booking.phone);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
+    public void cancelBooking(){
+        
+    }
 }

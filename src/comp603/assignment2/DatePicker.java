@@ -13,36 +13,37 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DatePicker extends JFrame {
-    
-    private java.util.Date date1 = null;
-    private java.util.Date date2 = null;
+
+    private Date CheckIndate = null;
+    private Date CheckOutdate = null;
     private SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-    private String dateIn = "";
-    private String dateOut = "";
+    private String dateIn;
+    private String dateOut;
     private boolean isValidDate1 = false;
     private boolean isValidDate2 = false;
-    private long diffInDays;
-   
+    protected long diffInDays;
+
     private JTextField checkInField;
     private JTextField checkOutField;
     private final JLabel checkIn;
-    private final JLabel checkOut;   
+    private final JLabel checkOut;
     private final JLabel info;
     private final JButton ReturnHome;
-    
+    private final JButton ReturnBooking;
     HomePage homePage;
     Book booking;
     PriceCalculator priceCal;
 
-    public DatePicker(Book booking, HomePage home) {
+    public DatePicker(Book booking, HomePage homePage) {
 
-        this.homePage = home;
+        this.homePage = homePage;
         this.booking = booking;
         setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,7 +84,7 @@ public class DatePicker extends JFrame {
                     if (isDateInValid) {
                         String dateStr1 = dateIn;
                         try {
-                            date1 = date.parse(dateStr1);
+                            CheckIndate = date.parse(dateStr1);
                         } catch (ParseException ex) {
                             Logger.getLogger(DatePicker.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -91,18 +92,18 @@ public class DatePicker extends JFrame {
                         Calendar c1 = Calendar.getInstance();
                         Calendar c2 = Calendar.getInstance();
                         c1.setTime(new java.util.Date());
-                        c2.setTime(date1);
+                        c2.setTime(CheckIndate);
                         int diff = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
                         int month = c2.get(Calendar.MONTH) + 1;
                         int day = c2.get(Calendar.DAY_OF_MONTH);
-                        if (date1.before(new java.util.Date())) {
+                        if (CheckIndate.before(new java.util.Date())) {
                             JOptionPane.showMessageDialog(DatePicker.this, "Error: The date entered is before the current date. Please enter a valid date.");
                         } else if (diff > 1 || diff < 0) {
                             JOptionPane.showMessageDialog(DatePicker.this, "Sorry you can only book the date within 1 year from the current year. "
                                     + "Please Enter again");
                         } else {
                             isValidDate1 = true;
-                            dateIn = date.format(date1);
+                            dateIn = date.format(CheckIndate);
                             System.out.println(dateIn);
                             checkInField.setEnabled(false);
                             checkOutField.setEnabled(true);
@@ -126,19 +127,19 @@ public class DatePicker extends JFrame {
                     if (isDateOutValid) {
                         String dateStr2 = dateOut;
                         try {
-                            date2 = date.parse(dateStr2);
+                            CheckOutdate = date.parse(dateStr2);
                         } catch (ParseException ex) {
                             Logger.getLogger(DatePicker.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         Calendar c3 = Calendar.getInstance();
-                        c3.setTime(date1);
+                        c3.setTime(CheckIndate);
                         c3.add(Calendar.DAY_OF_MONTH, 90);
-                        if (date2.before(date1) || date2.after(c3.getTime())) {
+                        if (CheckOutdate.before(CheckIndate) || CheckOutdate.after(c3.getTime())) {
                             JOptionPane.showMessageDialog(DatePicker.this, "The check out date must be after the check in date "
                                     + "and within 90 days. Please enter again");
                         } else {
                             isValidDate2 = true;
-                            dateOut = date.format(date2);
+                            dateOut = date.format(CheckOutdate);
                             System.out.println(dateOut);
                             checkOutField.setEnabled(false);
                         }
@@ -158,6 +159,11 @@ public class DatePicker extends JFrame {
                 if (isValidDate1 = true && isValidDate2 == true) {
                     int choice = showConfirmationDialog();
                     if (choice == JOptionPane.YES_OPTION) {
+                        diffInDays = ChronoUnit.DAYS.between(CheckIndate.toInstant(), CheckOutdate.toInstant());
+                        if (diffInDays == 0) {
+                            diffInDays = 1;
+                        }
+                        System.out.println(diffInDays);
                         dispose();
                         PriceCalculator(e);
                         System.out.println("User confirmed the selection.");
@@ -177,13 +183,20 @@ public class DatePicker extends JFrame {
 
         });
 
-        ReturnHome = new JButton("Return to Booking");
-        ReturnHome.setBounds(280, 480, 150, 35);
+        ReturnHome = new JButton("Return to HomePage");
+        ReturnHome.setBounds(270, 530, 180, 35);
         ReturnHome.addActionListener((ActionEvent e) -> {
             dispose();
-            ReturnButton(e);
+            ReturnHomeButton(e);
+        });
+        ReturnBooking = new JButton("Return to Booking");
+        ReturnBooking.setBounds(270, 480, 180, 35);
+        ReturnBooking.addActionListener((ActionEvent e) -> {
+            dispose();
+            ReturnBookingButton(e);
         });
 
+        //Adding all the components to the panel
         DatePanel.setBounds(0, 0, 700, 700);
         DatePanel.add(info);
         DatePanel.add(checkInField);
@@ -193,7 +206,8 @@ public class DatePicker extends JFrame {
         DatePanel.add(checkOut);
         DatePanel.add(confirmOut);
         DatePanel.add(submit);
-        DatePanel.add(home);
+        DatePanel.add(ReturnBooking);
+        DatePanel.add(ReturnHome);
         add(DatePanel);
 
         setVisible(true);
@@ -215,23 +229,38 @@ public class DatePicker extends JFrame {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to proceed?", "Confirmation", JOptionPane.YES_NO_OPTION);
     }
 
-    private void ReturnButton(ActionEvent evt) {
+    private void ReturnBookingButton(ActionEvent evt) {
         booking.setVisible(true);
         dispose();
     }
 
+    private void ReturnHomeButton(ActionEvent evt) {
+        homePage.setVisible(true);
+        dispose();
+    }
+
     private void PriceCalculator(ActionEvent evt) {
-        priceCal = new PriceCalculator(this);
+        priceCal = new PriceCalculator(homePage, this);
         priceCal.setVisible(true);
         this.setVisible(false);
     }
 
     public java.util.Date getDate1() {
-        return date1;
+        return CheckIndate;
     }
 
     public java.util.Date getDate2() {
-        return date2;
+        return CheckOutdate;
+    }
+
+    public String getDateIn() {
+        return dateIn;
+    }
+
+    public String getDateOut() {
+        return dateOut;
     }
     
+    
+
 }

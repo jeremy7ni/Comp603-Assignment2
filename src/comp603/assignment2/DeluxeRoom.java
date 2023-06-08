@@ -11,11 +11,7 @@ package comp603.assignment2;
 public class DeluxeRoom extends Room {
 
     public DeluxeRoom() {
-    }
-
-    
-    public DeluxeRoom(double price, String roomType) {
-        super(price = 350, roomType = "Deluxe Room");
+        super(350, "Deluxe Room");
     }
 
     @Override

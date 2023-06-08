@@ -21,19 +21,24 @@ import javax.swing.ScrollPaneConstants;
  */
 public class PriceCalculator extends JFrame {
 
+    private Double Cost;
     private final JLabel label;
     private JRadioButton yes;
     private JRadioButton no;
     private ButtonGroup selection;
     private JLabel Vip;
-    private boolean vip;
     private JTextArea textArea;
     private JButton confirm;
+    private JButton ReturnToDate;
+    private JButton ReturnHome;
     private JScrollPane scrollPane;
+
     DatePicker datePicker;
     HomePage homePage;
+    Room room;
+    Booking booking;
     
-    public PriceCalculator(HomePage homePage,DatePicker datePicker) {
+    public PriceCalculator(HomePage homePage, DatePicker datePicker) {
         this.homePage = homePage;
         this.datePicker = datePicker;
         setSize(700, 700);
@@ -62,14 +67,20 @@ public class PriceCalculator extends JFrame {
         yes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vip = true;
-                scrollPane.setVisible(true); 
+                makeRoom();
+                room.setVip(true);
+                room.calCost();
+                Cost = room.getPrice()*datePicker.diffInDays;
+                scrollPane.setVisible(true);
             }
         });
         no.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vip = false;
+                 makeRoom();
+                room.setVip(false);
+                room.calCost();
+                Cost = room.getPrice()*datePicker.diffInDays;
                 scrollPane.setVisible(true);
             }
         });
@@ -77,31 +88,50 @@ public class PriceCalculator extends JFrame {
         // new textArea to display the information and total cost.
         textArea = new JTextArea();
         scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(50, 300, 400, 250);
+        scrollPane.setBounds(50, 200, 300, 250);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         textArea.setEditable(false);
         scrollPane.setVisible(false);
         Font font = textArea.getFont();
         textArea.setFont(font.deriveFont(14f));
-        
+
         //Confirm Button
-        confirm = new JButton("Confirm");
-        confirm.setBounds(500, 350, 80, 35);
+        confirm = new JButton("<html>Confirm <br>Booking</html>");
+        confirm.setBounds(480, 270, 100, 50);
         confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    int choice = showConfirmationDialog();
-                    if (choice == JOptionPane.YES_OPTION) {
-                        JOptionPane.showMessageDialog(PriceCalculator.this, "Thank you ! Booking Confirmed");
-                        JOptionPane.showMessageDialog(PriceCalculator.this, "You will return to the homepage now");
-                        // after booking finished,go back to the homepage
+                int choice = showConfirmationDialog();
+                if (choice == JOptionPane.YES_OPTION) {                    
+                    booking = new Booking(homePage.bookingMenu.getName(),room,homePage.bookingMenu.getPhone(),
+                            homePage.bookingMenu.datePicker.getDateIn(),homePage.bookingMenu.datePicker.getDateOut());
+                    booking.toString();
+                    System.out.println(booking);
+                    homePage.DataBase.addBooking(booking);                    
+                    JOptionPane.showMessageDialog(PriceCalculator.this, "Thank you ! Booking Confirmed");
+                    JOptionPane.showMessageDialog(PriceCalculator.this, "You will return to the homepage now");
+                    // after booking finished,go back to the homepage
 
-                    } else {
-                        JOptionPane.showMessageDialog(PriceCalculator.this, "failed to confirm booking");
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(PriceCalculator.this, "failed to confirm booking");
+                }
             }
-        }); 
+        });
+
+        //Return to Home Button
+        ReturnHome = new JButton("Return to HomePage");
+        ReturnHome.setBounds(250, 530, 180, 35);
+        ReturnHome.addActionListener((ActionEvent e) -> {
+            dispose();
+            ReturnHomeButton(e);
+        });
+        ReturnToDate = new JButton("Return to Booking");
+        ReturnToDate.setBounds(250, 480, 180, 35);
+        ReturnToDate.addActionListener((ActionEvent e) -> {
+            dispose();
+            DateButton(e);
+        });
 
         PricePanel.add(label);
         PricePanel.add(yes);
@@ -110,6 +140,8 @@ public class PriceCalculator extends JFrame {
         PricePanel.add(textArea);
         PricePanel.add(confirm);
         PricePanel.add(scrollPane);
+        PricePanel.add(ReturnHome);
+        PricePanel.add(ReturnToDate);
         PricePanel.setBounds(0, 0, 700, 700);
         add(PricePanel);
         setVisible(true);
@@ -120,11 +152,28 @@ public class PriceCalculator extends JFrame {
         dispose();
     }
 
+    private void ReturnHomeButton(ActionEvent evt) {
+        homePage.setVisible(true);
+        dispose();
+    }
+
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to proceed?", "Confirmation", JOptionPane.YES_NO_OPTION);
     }
-    
-    public static void main(String[] args) {
-        PriceCalculator price = new PriceCalculator();
+
+    private void makeRoom() {
+        if (homePage.bookingMenu.selectedRoom.contains("Single")) {
+            room = new SingleRoom();
+        }
+        if (homePage.bookingMenu.selectedRoom.contains("Double")) {
+            room = new DoubleRoom();
+        }
+        if (homePage.bookingMenu.selectedRoom.contains("Deluxe")) {
+            room = new DeluxeRoom();
+        }
     }
+
+//    public static void main(String[] args) {
+//        PriceCalculator price = new PriceCalculator();
+//    }
 }

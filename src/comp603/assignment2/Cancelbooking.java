@@ -170,7 +170,4 @@ public class Cancelbooking extends JFrame {
         dispose();
     }
 
-//    public static void main(String[] args) {
-//        Cancelbooking cancel = new Cancelbooking();
-//    }
 }
