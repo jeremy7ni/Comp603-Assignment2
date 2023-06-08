@@ -6,7 +6,7 @@ package comp603.assignment2;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//Make a DatePicker Frame
 public class DatePicker extends JFrame {
 
     private Date CheckIndate = null;
@@ -213,6 +214,7 @@ public class DatePicker extends JFrame {
         setVisible(true);
     }
 
+    //Check if the date is Valid
     public boolean isDateValid(String inputDate, String dateFormat) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
@@ -224,7 +226,8 @@ public class DatePicker extends JFrame {
             return false;
         }
     }
-
+    
+    //check if user confirm the choice
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to proceed?", "Confirmation", JOptionPane.YES_NO_OPTION);
     }
@@ -245,13 +248,13 @@ public class DatePicker extends JFrame {
         this.setVisible(false);
     }
 
-    public java.util.Date getDate1() {
-        return CheckIndate;
-    }
-
-    public java.util.Date getDate2() {
-        return CheckOutdate;
-    }
+//    public java.util.Date getDate1() {
+//        return CheckIndate;
+//    }
+//
+//    public java.util.Date getDate2() {
+//        return CheckOutdate;
+//    }
 
     public String getDateIn() {
         return dateIn;

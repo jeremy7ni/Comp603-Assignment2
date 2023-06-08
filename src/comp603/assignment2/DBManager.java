@@ -1,14 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package comp603.assignment2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,9 +19,8 @@ public class DBManager {
     private final String USER_NAME = "pdc";
     private final String PASSWORD = "pdc";
     private String URL;
-//    private static final String URL = "jdbc:derby://localhost:1527/Comp603 HotelBookingSystem;create=true";  //url of the DB host
-
     Connection conn;
+    private ArrayList<Booking> bookingList;    
 
     public DBManager() {
         establishConnection();
@@ -45,7 +44,7 @@ public class DBManager {
             }
         }
     }
-    
+
     public void closeConnections() {
         if (conn != null) {
             try {
@@ -56,24 +55,62 @@ public class DBManager {
             }
         }
     }
-    
+
+    //adding Booking to the DataBase
     public void addBooking(Booking booking) {
         String query = "INSERT INTO BOOKINGLIST(CUSTOMERNAME, ROOMTYPE, CHECKINDATE, CHECKOUTDATE, PHONE) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1,booking.name);
-            statement.setString(2,booking.room.getRoomType());
-            statement.setString(3,booking.CheckIndate);
-            statement.setString(4,booking.CheckOutdate);
+            statement.setString(1, booking.name);
+            statement.setString(2, booking.room.getRoomType());
+            statement.setString(3, booking.CheckIndate);
+            statement.setString(4, booking.CheckOutdate);
             statement.setString(5, booking.phone);
             statement.executeUpdate();
-            
+
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void cancelBooking(){
+
+    //reading Booking from the DataBase
+    public void readBooking() {
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet booking = statement.executeQuery("SELECT * FROM BOOKINGLIST");
+            while (booking.next()) {
+                String name = booking.getString("CUSTOMERNAME");
+                String roomType = booking.getString("ROOMTYPE");
+                String checkInDate = booking.getString("CHECKINDATE");
+                String checkOutDate = booking.getString("CHECKOUTDATE");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public ArrayList<Booking> checkForBooking(String name, String phone) {
         
+        ArrayList<Booking> found = new ArrayList<>();
+        for (Booking token : bookingList ) {
+            if (name != null) {
+                if (name.equalsIgnoreCase(token.name)) {
+                    if (!found.contains(token)) {
+                        found.add(token);
+                    }
+                }
+            }
+
+            if (phone != null) {
+                if (phone.equals(token.phone)) {
+                    if (!found.contains(token)) {
+                        found.add(token);
+                    }
+                }
+            }
+        }
+        return found;
     }
 }

@@ -15,11 +15,6 @@ public class DeluxeRoom extends Room {
     }
 
     @Override
-    public void BedSize() {
-        System.out.println("You have 2 Double Bed in the Deluxe Room");
-    }
-
-    @Override
     public void RoomService() {
         System.out.println("You have more than basic Room Serivce in Deluxe Room");
         System.out.println("You can ask for Cleaning Service by dial 0111 using the phone in the room");
@@ -34,7 +29,6 @@ public class DeluxeRoom extends Room {
 
     @Override
     public void getRoomInfo() {
-        BedSize();
         RoomService();
         Kitchen();
     }

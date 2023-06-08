@@ -8,21 +8,21 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 public class HomePage extends JFrame {
+    
     protected DBManager DataBase;
     JPanel mainPanel;
     Book bookingMenu;
     Facilities fac;
     Cancelbooking cancel;
     
+    //Create a HomePage and put buttons for different functions
     public HomePage() {
         DataBase = new DBManager();
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Create and set the border
         int borderWidth = 10;
         Border border = BorderFactory.createLineBorder(Color.BLACK, borderWidth);
 

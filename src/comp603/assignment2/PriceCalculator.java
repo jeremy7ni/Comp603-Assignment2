@@ -12,32 +12,29 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 public class PriceCalculator extends JFrame {
 
     private Double Cost;
     private final JLabel label;
-    private JRadioButton yes;
-    private JRadioButton no;
-    private ButtonGroup selection;
-    private JLabel Vip;
-    private JTextArea textArea;
-    private JButton confirm;
-    private JButton ReturnToDate;
-    private JButton ReturnHome;
-    private JScrollPane scrollPane;
+    private final JRadioButton yes;
+    private final JRadioButton no;
+    private final ButtonGroup selection;
+    private final JLabel Vip;
+    private final JTextArea textArea;
+    private final JButton confirm;
+    private final JButton ReturnToDate;
+    private final JButton ReturnHome;
 
     DatePicker datePicker;
     HomePage homePage;
     Room room;
     Booking booking;
-    
+
     public PriceCalculator(HomePage homePage, DatePicker datePicker) {
         this.homePage = homePage;
         this.datePicker = datePicker;
@@ -70,32 +67,27 @@ public class PriceCalculator extends JFrame {
                 makeRoom();
                 room.setVip(true);
                 room.calCost();
-                Cost = room.getPrice()*datePicker.diffInDays;
-                scrollPane.setVisible(true);
+                Cost = room.getPrice() * datePicker.diffInDays;
+                showRoomInformation(room.isVip());
             }
         });
         no.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 makeRoom();
+                makeRoom();
                 room.setVip(false);
                 room.calCost();
-                Cost = room.getPrice()*datePicker.diffInDays;
-                scrollPane.setVisible(true);
+                Cost = room.getPrice() * datePicker.diffInDays;
+                showRoomInformation(room.isVip());
             }
         });
 
         // new textArea to display the information and total cost.
         textArea = new JTextArea();
-        scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(50, 200, 300, 250);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        textArea.setBounds(50, 200, 320, 250);
         textArea.setEditable(false);
-        scrollPane.setVisible(false);
         Font font = textArea.getFont();
         textArea.setFont(font.deriveFont(14f));
-
         //Confirm Button
         confirm = new JButton("<html>Confirm <br>Booking</html>");
         confirm.setBounds(480, 270, 100, 50);
@@ -103,14 +95,16 @@ public class PriceCalculator extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int choice = showConfirmationDialog();
-                if (choice == JOptionPane.YES_OPTION) {                    
-                    booking = new Booking(homePage.bookingMenu.getName(),room,homePage.bookingMenu.getPhone(),
-                            homePage.bookingMenu.datePicker.getDateIn(),homePage.bookingMenu.datePicker.getDateOut());
+                if (choice == JOptionPane.YES_OPTION) {
+                    booking = new Booking(homePage.bookingMenu.getName(), room, homePage.bookingMenu.getPhone(),
+                            homePage.bookingMenu.datePicker.getDateIn(), homePage.bookingMenu.datePicker.getDateOut());
                     booking.toString();
                     System.out.println(booking);
-                    homePage.DataBase.addBooking(booking);                    
+                    homePage.DataBase.addBooking(booking);
                     JOptionPane.showMessageDialog(PriceCalculator.this, "Thank you ! Booking Confirmed");
                     JOptionPane.showMessageDialog(PriceCalculator.this, "You will return to the homepage now");
+                    ReturnHomeButton(e);
+                    dispose();
                     // after booking finished,go back to the homepage
 
                 } else {
@@ -139,7 +133,6 @@ public class PriceCalculator extends JFrame {
         PricePanel.add(Vip);
         PricePanel.add(textArea);
         PricePanel.add(confirm);
-        PricePanel.add(scrollPane);
         PricePanel.add(ReturnHome);
         PricePanel.add(ReturnToDate);
         PricePanel.setBounds(0, 0, 700, 700);
@@ -157,10 +150,12 @@ public class PriceCalculator extends JFrame {
         dispose();
     }
 
+    //check if user confirm the choice
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to proceed?", "Confirmation", JOptionPane.YES_NO_OPTION);
     }
 
+    // Made a Room depends on the Room Type
     private void makeRoom() {
         if (homePage.bookingMenu.selectedRoom.contains("Single")) {
             room = new SingleRoom();
@@ -173,7 +168,21 @@ public class PriceCalculator extends JFrame {
         }
     }
 
-//    public static void main(String[] args) {
-//        PriceCalculator price = new PriceCalculator();
-//    }
+    private void showRoomInformation(boolean vip) {
+        // Clear the text area        
+        textArea.setText("");
+        if (vip) {
+            textArea.append("The Room You booked is: "+room.getRoomType() +"\n");
+            textArea.append("You can get discount price for 20% \n"
+                    + "the price per day now is $ " + room.getPrice());
+            textArea.append("\nThe total cost is $" + Cost);
+            textArea.setEditable(false);
+
+        } else if (!vip) {
+            textArea.append("The Room You booked is: "+room.getRoomType() +"\n");
+            textArea.append("the price per day now is $ " + room.getPrice());
+            textArea.append("\nThe total cost is $" + Cost);
+            textArea.setEditable(false);
+        }
+    }
 }

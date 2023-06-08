@@ -15,11 +15,6 @@ public class DoubleRoom extends Room {
     }
 
     @Override
-    public void BedSize() {
-        System.out.println("You have Double Bed in the Double Room");
-    }
-
-    @Override
     public void RoomService() {
         System.out.println("You have basic Room Serivce in Double Room");
         System.out.println("You can ask for Cleaning Service by dial 0111 using the phone in the room");

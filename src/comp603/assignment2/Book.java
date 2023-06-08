@@ -1,5 +1,6 @@
 package comp603.assignment2;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -16,17 +17,15 @@ import javax.swing.ScrollPaneConstants;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
+// Make a Booking Frame
 public class Book extends JFrame {
 
     private String name;
-//    private Room room;
     private String phone;
     private boolean isNameSubmitted = false;
     private boolean isPhoneSubmitted = false;
-//    private String dateIn = "";
-//    private String dateOut = "";
     protected String selectedRoom;
     protected final String[] roomTypes = {"Single Room", "Double Room", "Deluxe Room"};
 
@@ -52,8 +51,7 @@ public class Book extends JFrame {
         JPanel BookPanel = new JPanel();
         BookPanel.setLayout(null);
 
-        // Get user info
-        textArea = new JTextArea();
+        // Get user info         
         nameTextField = new JTextField();
         nameTextField.setBounds(50, 100, 300, 30);
         phoneTextField = new JTextField();
@@ -76,12 +74,16 @@ public class Book extends JFrame {
         confirmName.setBounds(400, 100, 150, 30);
         confirmPhone.setBounds(400, 200, 150, 30);
 
+        //Display the informations for different Room Type
+        textArea = new JTextArea();
+        textArea.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setBounds(50, 350, 400, 250);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         textArea.setEditable(false);
 
+        //Display different Room Type in JComboBox
         roomType = new JComboBox();
         roomType.setModel(new DefaultComboBoxModel<>(roomTypes));
         roomType.setBounds(200, 270, 150, 35);
@@ -93,6 +95,7 @@ public class Book extends JFrame {
             }
         });
 
+        //After user finish all the selection,process to next Frame (DatePicker)
         finishSelection = new JButton("Finished Selection");
         finishSelection.setBounds(480, 410, 150, 40);
         finishSelection.addActionListener(new ActionListener() {
@@ -103,7 +106,6 @@ public class Book extends JFrame {
                     if (choice == JOptionPane.YES_OPTION) {
                         DatePicker(e);
                         selectedRoom = (String) roomType.getSelectedItem();
-                        //setVisible(false);
                     } else {
 
                     }
@@ -134,7 +136,6 @@ public class Book extends JFrame {
         BookPanel.add(confirmPhone);
         BookPanel.add(ReturnHome);
         BookPanel.setBounds(0, 0, 700, 700);
-
         add(BookPanel);
         setVisible(true);
     }
@@ -153,26 +154,46 @@ public class Book extends JFrame {
         dispose();
     }
 
+    private void DatePicker(ActionEvent evt) {
+        datePicker = new DatePicker(this, homePage);
+        datePicker.setVisible(true);
+        this.setVisible(false);
+    }
+
+    // Display room information based on the selected room type
     private void showRoomInformation(String roomType) {
         // Clear the text area        
         textArea.setText("");
-        // Display room information based on the selected room type
         if (roomType.equals("Single Room")) {
             textArea.append("Single Room Information:\n");
-            textArea.append("- Room size: ...\n");
-            textArea.append("- Maximum occupancy: ...\n");
+            textArea.append("Single Room $150 per day\n");
+            textArea.append("- You have Single Bed in the Single Room\n");
+            textArea.append("- You have basic Room Serivce in Single Room\n");
+            textArea.append("- You can ask for Cleaning Service\n "
+                    + "  by dial 0111 using the phone in the room\n");
+            textArea.append("- You can use Don't Disturb card if you needed\n");
             textArea.setEditable(false);
-            // Add more room information as needed
+
         } else if (roomType.equals("Double Room")) {
             textArea.append("Double Room Information:\n");
-            textArea.append("- Room size: ...\n");
-            textArea.append("- Maximum occupancy: ...\n");
+            textArea.append("Single Room $220 per day\n");
+            textArea.append("- You have basic Room Serivce in Double Room\n");
+            textArea.append("- You can ask for Cleaning Service\n "
+                    + "  by dial 0111 using the phone in the room\n");
+            textArea.append("- You can use Don't Disturb card if you needed\n");
             textArea.setEditable(false);
 
         } else if (roomType.equals("Deluxe Room")) {
             textArea.append("Deluxe Room Information:\n");
-            textArea.append("- Room size: ...\n");
-            textArea.append("- Maximum occupancy: ...\n");
+            textArea.append("Single Room $350 per day\n");
+            textArea.append("- You have more than basic Room Serivce in Deluxe Room\n");
+            textArea.append("- You can ask for Cleaning Service\n "
+                    + "  by dial 0111 using the phone in the room\n");
+            textArea.append("- you have a Kitchen to use\n");
+            textArea.append("- You can use Don't Disturb card if you needed\n");
+            textArea.append("- You can ask for Wake Up Service \n"
+                    + "  by dial 0112 using the phone in the room \n"
+                    + "  and tell the reception when you need the Wake Up Service");
             textArea.setEditable(false);
         }
     }
@@ -190,12 +211,7 @@ public class Book extends JFrame {
         return true;
     }
 
-    private void DatePicker(ActionEvent evt) {
-        datePicker = new DatePicker(this, homePage);
-        datePicker.setVisible(true);
-        this.setVisible(false);
-    }
-
+    //check if the name been submited
     private void submitName() {
         name = nameTextField.getText();
         if (!name.isEmpty()) {
@@ -211,6 +227,7 @@ public class Book extends JFrame {
 
     }
 
+    //check if the phone been submited
     private void submitPhone() {
         phone = phoneTextField.getText();
         if (phoneisValid(phone)) {
@@ -222,6 +239,7 @@ public class Book extends JFrame {
         }
     }
 
+    //check if user confirm the choice
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to choose " + (String) roomType.getSelectedItem() + " ", "Confirmation", JOptionPane.YES_NO_OPTION);
     }

@@ -21,12 +21,10 @@ abstract class Room {
     }
 
     // if input vip is true, then room.vip = true
-    public abstract void BedSize();
 
     public abstract void RoomService();
 
     public void getRoomInfo() {
-        BedSize();
         RoomService();
     }
 
@@ -44,6 +42,10 @@ abstract class Room {
 
     public double getPrice() {
         return price;
+    }
+
+    public boolean isVip() {
+        return vip;
     }
 
     public void setPrice(int price) {
