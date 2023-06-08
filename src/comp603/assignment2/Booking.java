@@ -27,11 +27,13 @@ public class Booking {
         this.CheckOutdate = CheckOutdate;
     }
 
-    
     @Override
     public String toString() {
-        return "Booking{" + "name=" + name + ", room=" + room.getRoomType() + ", phone=" + phone + ", CheckIndate=" + CheckIndate + ", CheckOutdate=" + CheckOutdate + '}';
+        return "Name: " + name + "\n"
+                + "phone: " + phone + "\n"
+                + "Room Type: " + room.getRoomType() + "\n"
+                + "CheckIndate: " + CheckIndate + "\n"
+                + "CheckOutdate" + CheckOutdate + "\n\n";
     }
 
-    
 }

@@ -11,17 +11,18 @@ import javax.swing.border.Border;
  * @author JIUXIN NI
  */
 public class HomePage extends JFrame {
-    
+
     protected DBManager DataBase;
     JPanel mainPanel;
     Book bookingMenu;
     Facilities fac;
     Cancelbooking cancel;
-    
+    CheckBooking check;
+
     //Create a HomePage and put buttons for different functions
     public HomePage() {
         DataBase = new DBManager();
-        
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         int borderWidth = 10;
         Border border = BorderFactory.createLineBorder(Color.BLACK, borderWidth);
@@ -39,7 +40,7 @@ public class HomePage extends JFrame {
     private void setPanel() {
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
-        
+
         JButton button1 = new JButton("Make new booking");
         button1.setBounds(220, 150, 200, 35);
         button1.addActionListener(new ActionListener() {
@@ -64,6 +65,13 @@ public class HomePage extends JFrame {
 
         JButton button3 = new JButton("Check my booking");
         button3.setBounds(220, 250, 200, 35);
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CheckBooking(e);
+            }
+
+        });
         mainPanel.add(button3);
 
         JButton button4 = new JButton("Facilities");
@@ -88,7 +96,7 @@ public class HomePage extends JFrame {
         mainPanel.add(button5);
 
     }
-    
+
     private void bookingButton(ActionEvent eve) {
         bookingMenu = new Book(this);
         bookingMenu.setVisible(true);
@@ -100,13 +108,19 @@ public class HomePage extends JFrame {
         fac.setVisible(true);
         this.setVisible(false);
     }
-    
+
     private void Cancelbooking(ActionEvent evt) {
         cancel = new Cancelbooking(this);
         cancel.setVisible(true);
         this.setVisible(false);
     }
-    
+
+    private void CheckBooking(ActionEvent evt) {
+        check = new CheckBooking(this);
+        check.setVisible(true);
+        this.setVisible(false);
+    }
+
     private void exitButton(ActionEvent evt) {
         JOptionPane.showMessageDialog(HomePage.this, "Thank you for using the system.");
         System.exit(0);

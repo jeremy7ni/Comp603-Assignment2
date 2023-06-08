@@ -14,9 +14,13 @@
         <group>
             <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/DatePicker.java</file>
             <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/DBManager.java</file>
+            <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/Facilities.java</file>
+            <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/Booking.java</file>
             <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/HotelBookingSystem.java</file>
+            <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/Cancelbooking.java</file>
             <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/PriceCalculator.java</file>
             <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/Book.java</file>
+            <file>file:/C:/Users/Jeremy/Documents/NetBeansProjects/Comp603%20Assignment2/src/comp603/assignment2/CheckBooking.java</file>
         </group>
     </open-files>
 </project-private>

@@ -164,10 +164,9 @@ public class DatePicker extends JFrame {
                         if (diffInDays == 0) {
                             diffInDays = 1;
                         }
-                        System.out.println(diffInDays);
                         dispose();
                         PriceCalculator(e);
-                        System.out.println("User confirmed the selection.");
+                        System.out.println("You confirmed the selection.");
 
                     } else {
                         JOptionPane.showMessageDialog(DatePicker.this, "You can re-select the date now");

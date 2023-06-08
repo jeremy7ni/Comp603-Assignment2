@@ -87,7 +87,7 @@ public class PriceCalculator extends JFrame {
         textArea.setBounds(50, 200, 320, 250);
         textArea.setEditable(false);
         Font font = textArea.getFont();
-        textArea.setFont(font.deriveFont(14f));
+       textArea.setFont(new Font("Arial", Font.PLAIN, 15));
         //Confirm Button
         confirm = new JButton("<html>Confirm <br>Booking</html>");
         confirm.setBounds(480, 270, 100, 50);

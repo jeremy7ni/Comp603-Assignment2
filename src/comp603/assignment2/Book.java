@@ -24,15 +24,15 @@ public class Book extends JFrame {
 
     private String name;
     private String phone;
-    private boolean isNameSubmitted = false;
-    private boolean isPhoneSubmitted = false;
+    public boolean isNameSubmitted = false;
+    public boolean isPhoneSubmitted = false;
     protected String selectedRoom;
     protected final String[] roomTypes = {"Single Room", "Double Room", "Deluxe Room"};
 
     private final JLabel nameLabel = new JLabel("Please enter your name: ");
     private final JLabel phoneLabel = new JLabel("Please enter your phone number: ");
-    private final JTextField nameTextField;
-    private final JTextField phoneTextField;
+    public final JTextField nameTextField;
+    public final JTextField phoneTextField;
     private final JLabel title = new JLabel("Make new Booking");
     private final JButton finishSelection;
     private final JTextArea textArea;
@@ -212,7 +212,7 @@ public class Book extends JFrame {
     }
 
     //check if the name been submited
-    private void submitName() {
+    public void submitName() {
         name = nameTextField.getText();
         if (!name.isEmpty()) {
             System.out.println(name);
@@ -228,7 +228,7 @@ public class Book extends JFrame {
     }
 
     //check if the phone been submited
-    private void submitPhone() {
+    public void submitPhone() {
         phone = phoneTextField.getText();
         if (phoneisValid(phone)) {
             isPhoneSubmitted = true;

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jeremy
+ * @author Jiuxin Ni
  */
 public class DBManager {
 
@@ -20,10 +20,13 @@ public class DBManager {
     private final String PASSWORD = "pdc";
     private String URL;
     Connection conn;
-    private ArrayList<Booking> bookingList;    
+    private ArrayList<Booking> bookingList;
+    private Room room;
 
     public DBManager() {
+        bookingList = new ArrayList<>();
         establishConnection();
+        readBooking();
     }
 
     public Connection getConnection() {
@@ -81,9 +84,13 @@ public class DBManager {
             while (booking.next()) {
                 String name = booking.getString("CUSTOMERNAME");
                 String roomType = booking.getString("ROOMTYPE");
+                makeRoom(roomType);
                 String checkInDate = booking.getString("CHECKINDATE");
                 String checkOutDate = booking.getString("CHECKOUTDATE");
+                String phone = booking.getString("PHONE");
 
+                Booking newBooking = new Booking(name, room, phone, checkInDate, checkOutDate);
+                bookingList.add(newBooking);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,26 +98,32 @@ public class DBManager {
 
     }
 
+    // search booking record using name and phone
     public ArrayList<Booking> checkForBooking(String name, String phone) {
-        
+
         ArrayList<Booking> found = new ArrayList<>();
-        for (Booking token : bookingList ) {
+        for (Booking token : bookingList) {
             if (name != null) {
                 if (name.equalsIgnoreCase(token.name)) {
-                    if (!found.contains(token)) {
+                    if (phone.equals(token.phone)&& !found.contains(token)) {
                         found.add(token);
-                    }
                 }
-            }
-
-            if (phone != null) {
-                if (phone.equals(token.phone)) {
-                    if (!found.contains(token)) {
-                        found.add(token);
-                    }
                 }
             }
         }
         return found;
+    }
+    
+    //make Room object
+    private void makeRoom(String roomType) {
+        if (roomType.contains("Single")) {
+            room= new SingleRoom();
+        } 
+        if (roomType.contains("Double")) {
+            room = new DoubleRoom();
+        }
+        if (roomType.contains("Deluxe")) {
+            room = new DeluxeRoom();
+        }
     }
 }
