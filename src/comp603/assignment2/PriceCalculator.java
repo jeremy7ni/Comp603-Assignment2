@@ -144,7 +144,7 @@ public class PriceCalculator extends JFrame {
         datePicker.setVisible(true);
         dispose();
     }
-
+    
     private void ReturnHomeButton(ActionEvent evt) {
         homePage.setVisible(true);
         dispose();
@@ -168,6 +168,7 @@ public class PriceCalculator extends JFrame {
         }
     }
 
+    //Show Room Info for the user again
     private void showRoomInformation(boolean vip) {
         // Clear the text area        
         textArea.setText("");

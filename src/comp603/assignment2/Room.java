@@ -1,4 +1,3 @@
-
 package comp603.assignment2;
 
 /**
@@ -10,10 +9,11 @@ abstract class Room {
     private double price;
     private String roomType;
     private boolean vip;
-    
-    public Room(){
-    
+
+    public Room() {
+
     }
+
     public Room(double price, String roomType) {
         this.price = price;
         this.roomType = roomType;
@@ -21,7 +21,6 @@ abstract class Room {
     }
 
     // if input vip is true, then room.vip = true
-
     public abstract void RoomService();
 
     public void getRoomInfo() {
@@ -60,4 +59,16 @@ abstract class Room {
         this.roomType = roomType;
     }
 
+    public boolean comepareTo(Room room) {
+        boolean valid = true;
+        if (!room.roomType.equalsIgnoreCase(this.roomType)) {
+            valid = false;
+        }
+        if (valid) {
+            if (!(room.price == this.price)) {
+                valid = false;
+            }
+        }
+        return valid;
+    }
 }

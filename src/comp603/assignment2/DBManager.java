@@ -27,6 +27,7 @@ public class DBManager {
         bookingList = new ArrayList<>();
         establishConnection();
         readBooking();
+
     }
 
     public Connection getConnection() {
@@ -63,14 +64,16 @@ public class DBManager {
     public void addBooking(Booking booking) {
         String query = "INSERT INTO BOOKINGLIST(CUSTOMERNAME, ROOMTYPE, CHECKINDATE, CHECKOUTDATE, PHONE) VALUES (?,?,?,?,?)";
         try {
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, booking.name);
-            statement.setString(2, booking.room.getRoomType());
-            statement.setString(3, booking.CheckIndate);
-            statement.setString(4, booking.CheckOutdate);
-            statement.setString(5, booking.phone);
-            statement.executeUpdate();
-
+            try (PreparedStatement statement = conn.prepareStatement(query)) {
+                statement.setString(1, booking.name);
+                statement.setString(2, booking.room.getRoomType());
+                statement.setString(3, booking.CheckIndate);
+                statement.setString(4, booking.CheckOutdate);
+                statement.setString(5, booking.phone);
+                statement.executeUpdate();
+                statement.close();
+                bookingList.add(booking);
+            }
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -88,7 +91,6 @@ public class DBManager {
                 String checkInDate = booking.getString("CHECKINDATE");
                 String checkOutDate = booking.getString("CHECKOUTDATE");
                 String phone = booking.getString("PHONE");
-
                 Booking newBooking = new Booking(name, room, phone, checkInDate, checkOutDate);
                 bookingList.add(newBooking);
             }
@@ -98,27 +100,52 @@ public class DBManager {
 
     }
 
-    // search booking record using name and phone
+    public void delectBooking(Booking booking) {
+        String query = "DELETE FROM BOOKINGLIST WHERE CUSTOMERNAME = ? AND ROOMTYPE = ? AND CHECKINDATE = ? AND CHECKOUTDATE = ? AND PHONE = ? ";
+        try {
+            try (PreparedStatement statement = conn.prepareStatement(query)) {
+                statement.setString(1, booking.name);
+                statement.setString(2, booking.room.getRoomType());
+                statement.setString(3, booking.CheckIndate);
+                statement.setString(4, booking.CheckOutdate);
+                statement.setString(5, booking.phone);
+                statement.executeUpdate();
+                statement.close();
+                ArrayList<Booking> delect = bookingList;
+                for (Booking token : delect) {
+                    
+                    if (token.compareTo(booking)) {
+                        delect.remove(token);
+                    }
+                }
+                bookingList = delect;
+            }
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+// search booking record using name and phone
     public ArrayList<Booking> checkForBooking(String name, String phone) {
 
         ArrayList<Booking> found = new ArrayList<>();
         for (Booking token : bookingList) {
             if (name != null) {
                 if (name.equalsIgnoreCase(token.name)) {
-                    if (phone.equals(token.phone)&& !found.contains(token)) {
+                    if (phone.equals(token.phone) && !found.contains(token)) {
                         found.add(token);
-                }
+                    }
                 }
             }
         }
         return found;
     }
-    
+
     //make Room object
     private void makeRoom(String roomType) {
         if (roomType.contains("Single")) {
-            room= new SingleRoom();
-        } 
+            room = new SingleRoom();
+        }
         if (roomType.contains("Double")) {
             room = new DoubleRoom();
         }

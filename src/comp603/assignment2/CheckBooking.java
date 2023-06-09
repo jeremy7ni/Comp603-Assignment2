@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package comp603.assignment2;
 
 import java.awt.event.ActionEvent;
@@ -18,7 +15,7 @@ import javax.swing.ScrollPaneConstants;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 public class CheckBooking extends JFrame {
 
@@ -26,8 +23,9 @@ public class CheckBooking extends JFrame {
     private String phone;
     private boolean isNameSubmitted = false;
     private boolean isPhoneSubmitted = false;
-    private final JLabel nameLabel = new JLabel("Please enter your name: ");
-    private final JLabel phoneLabel = new JLabel("Please enter your phone number: ");
+    protected int index = 1;
+    private final JLabel nameLabel;
+    private final JLabel phoneLabel;
     private final JTextField nameTextField;
     private final JTextField phoneTextField;
     private final JTextArea textArea;
@@ -54,6 +52,8 @@ public class CheckBooking extends JFrame {
         nameTextField.setBounds(50, 100, 300, 30);
         phoneTextField = new JTextField();
         phoneTextField.setBounds(50, 200, 300, 30);
+        nameLabel = new JLabel("Please enter your name: ");
+        phoneLabel = new JLabel("Please enter your phone number: ");
         nameLabel.setBounds(50, 50, 500, 30);
         phoneLabel.setBounds(50, 150, 500, 30);
         JButton confirmName = new JButton("Confirm Name");
@@ -157,16 +157,18 @@ public class CheckBooking extends JFrame {
     
     // search booking record using name and phone on the DataBase
     private void getResult(){
-        if(isNameSubmitted && isPhoneSubmitted){
+        if(isNameSubmitted && isPhoneSubmitted && index == 1){
             ArrayList<Booking> result = homePage.DataBase.checkForBooking(name, phone);
             String results = "";
             if(!result.isEmpty()){
                 for(Booking token: result){
-                    results+=token.toString();
+                    results+=index + "\n"+token.toString();
+                    index++;
                 }
                 textArea.setText(results);
             }else{
                 textArea.setText("No record found");
+                JOptionPane.showMessageDialog(this, "Sorry we couldn't find your booking.");
             }
         }
         

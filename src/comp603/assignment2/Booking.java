@@ -33,7 +33,35 @@ public class Booking {
                 + "phone: " + phone + "\n"
                 + "Room Type: " + room.getRoomType() + "\n"
                 + "CheckIndate: " + CheckIndate + "\n"
-                + "CheckOutdate" + CheckOutdate + "\n\n";
+                + "CheckOutdate: " + CheckOutdate + "\n\n";
     }
-
+    
+    public boolean compareTo(Booking booking){
+        boolean valid = true;
+        if(!booking.name.equalsIgnoreCase(this.name)){
+            valid = false;
+        }
+        if(valid){
+            if(!booking.phone.equalsIgnoreCase(this.phone)){
+                valid = false;
+            }
+            
+        }
+        if(valid){
+            if(!booking.CheckIndate.equalsIgnoreCase(this.CheckIndate)){
+                valid = false;
+            }
+        }
+        if(valid){
+            if(!booking.CheckOutdate.equalsIgnoreCase(this.CheckOutdate)){
+                valid = false;
+            }
+        }
+        if(valid){
+            if(!booking.room.comepareTo(this.room)){
+                valid = false;
+            }
+        }
+        return valid;
+    }
 }

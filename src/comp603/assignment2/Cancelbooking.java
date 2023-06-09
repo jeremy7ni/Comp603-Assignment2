@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,17 +24,22 @@ public class Cancelbooking extends JFrame {
     private String phone;
     private boolean isNameSubmitted = false;
     private boolean isPhoneSubmitted = false;
-    ArrayList<String> bookingList = new ArrayList<>();
+    ArrayList<Booking> result;
+    ArrayList<Integer> roomList = new ArrayList<>();
     protected Room room;
     protected Booking booking;
-    private final JLabel nameLabel = new JLabel("Please enter your name: ");
-    private final JLabel phoneLabel = new JLabel("Please enter your phone number: ");
+    private final JLabel nameLabel;
+    private final JLabel phoneLabel;
+    private final JLabel roomLabel;
     private final JTextField nameTextField;
     private final JTextField phoneTextField;
     private final JTextArea textArea;
     private final JButton findBooking;
     private final JButton confirmCancel;
     private final JButton ReturnHome;
+    private final JComboBox combo;
+    int index = 1;
+    private boolean searched = false;
     JPanel cancelPanel;
     HomePage homePage;
 
@@ -53,6 +59,8 @@ public class Cancelbooking extends JFrame {
         nameTextField.setBounds(50, 100, 300, 30);
         phoneTextField = new JTextField();
         phoneTextField.setBounds(50, 200, 300, 30);
+        nameLabel = new JLabel("Please enter your name: ");
+        phoneLabel = new JLabel("Please enter your phone number: ");
         nameLabel.setBounds(50, 50, 500, 30);
         phoneLabel.setBounds(50, 150, 500, 30);
         JButton confirmName = new JButton("Confirm Name");
@@ -73,37 +81,51 @@ public class Cancelbooking extends JFrame {
         //TextArea to show user's information
         textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(50, 300, 400, 250);
+        scrollPane.setBounds(50, 320, 400, 250);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         textArea.setEditable(false);
-        
+
+        roomLabel = new JLabel("Please select the Room you want to cancel");
+        roomLabel.setBounds(50, 250, 300, 35);
+        combo = new JComboBox();
+        combo.setBounds(350, 250, 80, 35);
         findBooking = new JButton("Search for Booking");
         findBooking.setBounds(480, 320, 150, 40);
         findBooking.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            }
+                if (isNameSubmitted && isPhoneSubmitted) {
+                    getResult();
+                } else {
+                    JOptionPane.showMessageDialog(Cancelbooking.this, "Plese enter your name and phone number first.");
+                }
+            }   
         });
-        
+
         //Confirm cancel Booking
         confirmCancel = new JButton("Cancel The Booking");
         confirmCancel.setBounds(480, 400, 150, 40);
+        confirmCancel.setEnabled(false);
         confirmCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isNameSubmitted && isPhoneSubmitted) {
-
+//                    if (textArea.getText().contains(""))
+                    Booking selectedBooking = result.get(combo.getSelectedIndex());
+                    homePage.DataBase.delectBooking(selectedBooking);
                     int choice = showConfirmationDialog();
                     if (choice == JOptionPane.YES_OPTION) {
+
                         JOptionPane.showMessageDialog(Cancelbooking.this, "Thank you ! Booking Cancelled");
                         JOptionPane.showMessageDialog(Cancelbooking.this, "You will return to the homepage now");
                         System.out.println("User confirmed the selection.");
-                        // after cancel finished,go back to the homepage
+                        HomeButton(e);
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(Cancelbooking.this, "failed to cocancel booking");
                     }
+
                 } else {
                     JOptionPane.showMessageDialog(Cancelbooking.this, "Plese enter your name and phone number first.");
                 }
@@ -123,7 +145,8 @@ public class Cancelbooking extends JFrame {
         cancelPanel.add(phoneTextField);
         cancelPanel.add(confirmName);
         cancelPanel.add(confirmPhone);
-        cancelPanel.add(textArea);
+        cancelPanel.add(roomLabel);
+        cancelPanel.add(combo);
         cancelPanel.add(scrollPane);
         cancelPanel.add(findBooking);
         cancelPanel.add(confirmCancel);
@@ -175,11 +198,6 @@ public class Cancelbooking extends JFrame {
         return true;
     }
 
-    public ArrayList<Booking> checkForBooking(String name, String phone) {
-        ArrayList<Booking> find = new ArrayList<>();
-        return find;
-    }
-
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel this Booking?", "Confirmation", JOptionPane.YES_NO_OPTION);
     }
@@ -189,18 +207,24 @@ public class Cancelbooking extends JFrame {
         dispose();
     }
 
-    public void showBookingDetails() {
-        
-        textArea.setText("");
-        //if user found
-        textArea.append("The Room You booked is: " + room.getRoomType() + "\n");
-        textArea.append("the Date you booked is from \n");
-        textArea.append(booking.CheckIndate + " to " + booking.CheckOutdate);
-        textArea.setEditable(false);
-
-        //else
-        textArea.setText("Sorry we couldn't find your Booking records\n "
-                + "Please check your name or phone number");
-        textArea.setEditable(false);
+    // search booking record using name and phone on the DataBase
+    private void getResult() {
+        if (isNameSubmitted && isPhoneSubmitted && index == 1) {
+            result = homePage.DataBase.checkForBooking(name, phone);
+            String results = "";
+            if (!result.isEmpty()) {
+                confirmCancel.setEnabled(true);
+                for (Booking token : result) {
+                    results += index + "\n" + token.toString();
+                    combo.addItem(index + "");
+                    index++;                  
+                }
+                textArea.setText(results);
+            } else {
+                textArea.setText("No record found");
+                JOptionPane.showMessageDialog(this, "Sorry we couldn't find your booking.");
+            }
+        }
     }
+
 }
