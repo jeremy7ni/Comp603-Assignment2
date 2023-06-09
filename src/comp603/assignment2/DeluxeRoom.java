@@ -6,7 +6,7 @@ package comp603.assignment2;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 public class DeluxeRoom extends Room {
 

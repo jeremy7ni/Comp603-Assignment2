@@ -2,7 +2,7 @@ package comp603.assignment2;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 abstract class Room {
 
@@ -10,9 +10,6 @@ abstract class Room {
     private String roomType;
     private boolean vip;
 
-    public Room() {
-
-    }
 
     public Room(double price, String roomType) {
         this.price = price;

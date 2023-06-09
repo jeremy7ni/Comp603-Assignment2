@@ -16,8 +16,10 @@ import javax.swing.ScrollPaneConstants;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
+
+// Cancel the booking JFrame
 public class Cancelbooking extends JFrame {
 
     private String name;
@@ -154,7 +156,8 @@ public class Cancelbooking extends JFrame {
         add(cancelPanel);
         setVisible(true);
     }
-
+    
+    // check if the name is sumbited
     private void submitName() {
         name = nameTextField.getText();
         if (!name.isEmpty()) {
@@ -169,7 +172,8 @@ public class Cancelbooking extends JFrame {
         }
 
     }
-
+    
+    // check if the phone is sumbited
     private void submitPhone() {
         phone = phoneTextField.getText();
         if (phoneisValid(phone)) {

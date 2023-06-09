@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
@@ -120,7 +119,7 @@ public class PriceCalculator extends JFrame {
             dispose();
             ReturnHomeButton(e);
         });
-        ReturnToDate = new JButton("Return to Booking");
+        ReturnToDate = new JButton("Return to DatePicker");
         ReturnToDate.setBounds(250, 480, 180, 35);
         ReturnToDate.addActionListener((ActionEvent e) -> {
             dispose();

@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package comp603.assignment2;
 
-import java.util.Date;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 // To create new Booking after user agree with everything
 public class Booking {
@@ -19,6 +15,7 @@ public class Booking {
     protected String CheckIndate;
     protected String CheckOutdate;
 
+    
     public Booking(String name, Room room, String phone, String CheckIndate, String CheckOutdate) {
         this.name = name;
         this.room = room;

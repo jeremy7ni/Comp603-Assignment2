@@ -113,9 +113,9 @@ public class DBManager {
                 statement.close();
                 ArrayList<Booking> delect = bookingList;
                 for (Booking token : delect) {
-                    
                     if (token.compareTo(booking)) {
                         delect.remove(token);
+                        break;
                     }
                 }
                 bookingList = delect;

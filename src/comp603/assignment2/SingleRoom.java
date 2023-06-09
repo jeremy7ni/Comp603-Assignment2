@@ -2,9 +2,10 @@ package comp603.assignment2;
 
 /**
  *
- * @author Jeremy
+ * @author JIUXIN NI
  */
 public class SingleRoom extends Room {
+
 
     public SingleRoom() {
         super(150, "Single Room");

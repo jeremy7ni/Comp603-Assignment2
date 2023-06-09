@@ -42,7 +42,6 @@ public class Book extends JFrame {
     DatePicker datePicker;
 
     public Book(HomePage homepage) {
-
         this.homePage = homepage;
 
         setSize(700, 700);

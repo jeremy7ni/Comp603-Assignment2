@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package comp603.assignment2;
 
 /**
@@ -225,7 +221,7 @@ public class DatePicker extends JFrame {
             return false;
         }
     }
-    
+
     //check if user confirm the choice
     private int showConfirmationDialog() {
         return JOptionPane.showConfirmDialog(this, "Are you sure you want to proceed?", "Confirmation", JOptionPane.YES_NO_OPTION);
@@ -247,14 +243,6 @@ public class DatePicker extends JFrame {
         this.setVisible(false);
     }
 
-//    public java.util.Date getDate1() {
-//        return CheckIndate;
-//    }
-//
-//    public java.util.Date getDate2() {
-//        return CheckOutdate;
-//    }
-
     public String getDateIn() {
         return dateIn;
     }
@@ -262,7 +250,13 @@ public class DatePicker extends JFrame {
     public String getDateOut() {
         return dateOut;
     }
-    
-    
+
+    public void setDateIn(String dateIn) {
+        this.dateIn = dateIn;
+    }
+
+    public void setDateOut(String dateOut) {
+        this.dateOut = dateOut;
+    }
 
 }
